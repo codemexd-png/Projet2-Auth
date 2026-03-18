@@ -1,18 +1,18 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Projet2Auth.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Projet2Auth.Areas.Identity.Pages.Account
 {
-    public class RegisterModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) : PageModel
+    public class RegisterModel(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager) : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager = signInManager;
-        private readonly UserManager<IdentityUser> _userManager = userManager;
+        private readonly SignInManager<AppUser> _signInManager = signInManager;
+        private readonly UserManager<AppUser> _userManager = userManager;
 
         [BindProperty]
         public InputModel? Input { get; set; }
-
         public string? ReturnUrl { get; set; }
 
         public class InputModel
@@ -46,16 +46,26 @@ namespace Projet2Auth.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input?.Email, Email = Input?.Email };
+                //AppUser au lieu de IdentityUser
+                var user = new AppUser
+                {
+                    UserName = Input?.Email,
+                    Email = Input?.Email,
+                    NomUser = Input?.Email, //champ de Dosso
+                    EmailConfirmed = true
+                };
+
                 var result = await _userManager.CreateAsync(user, Input?.Password!);
 
                 if (result.Succeeded)
                 {
+                    // Ajoute le rôle User automatiquement
+                    await _userManager.AddToRoleAsync(user, "User");
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
                 }
 
-                // Affiche les erreurs (ex : email déjà utilisé)
+                // Affiche les erreurs
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
