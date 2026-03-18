@@ -1,8 +1,48 @@
-﻿@*
-    
-*@
-@{
-}
-<h1>Ma page Admin</h1>
+﻿@model IEnumerable<Projet2Auth.Models.AppUser>
 
-<p>Bienvenue sur la page admin</p>
+@{
+    ViewData["Title"] = "Admin Panel";
+}
+
+<div class="container mt-4">
+    <div class="alert alert-danger">
+        <h2> Panneau Administrateur</h2>
+        <p>Cette page est accessible uniquement aux <strong>Admins</strong>.</p>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-dark text-white">
+            <h5> Liste des utilisateurs</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Nom</th>
+                        <th>Email confirmé</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@user.Email</td>
+                            <td>@user.NomUser</td>
+                            <td>
+                                @if (user.EmailConfirmed)
+                                {
+                                    <span class="badge bg-success"> Oui</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning"> Non</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

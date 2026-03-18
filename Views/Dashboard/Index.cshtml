@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container mt-4">
+    <div class="alert alert-success">
+        <h2>Dashboard</h2>
+        <p>Bienvenue <strong>@User.Identity!.Name</strong> ! Vous êtes connecté.</p>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Votre espace personnel</h5>
+            <p class="card-text">
+                Cette page est accessible uniquement aux utilisateurs connectés.
+            </p>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-controller="Admin" asp-action="Index" class="btn btn-danger">
+                    Aller au panneau Admin
+                </a>
+            }
+        </div>
+    </div>
+</div>

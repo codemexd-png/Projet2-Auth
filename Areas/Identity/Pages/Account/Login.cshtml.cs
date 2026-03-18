@@ -1,17 +1,17 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Projet2Auth.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Projet2Auth.Areas.Identity.Pages.Account
 {
-    public class LoginModel(SignInManager<IdentityUser> signInManager) : PageModel
+    public class LoginModel(SignInManager<AppUser> signInManager) : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager = signInManager;
+        private readonly SignInManager<AppUser> _signInManager = signInManager;
 
         [BindProperty]
         public InputModel? Input { get; set; }
-
         public string? ReturnUrl { get; set; }
 
         public class InputModel
@@ -35,6 +35,30 @@ namespace Projet2Auth.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl ?? Url.Content("~/");
         }
 
-        
+        public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
+        {
+            returnUrl ??= Url.Content("~/");
+
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(
+                    Input!.Email!,
+                    Input.Password!,
+                    Input.RememberMe,
+                    lockoutOnFailure: false
+                );
+
+                if (result.Succeeded)
+                {
+                    return LocalRedirect(returnUrl);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Courriel ou mot de passe incorrect.");
+                }
+            }
+
+            return Page();
+        }
     }
 }
