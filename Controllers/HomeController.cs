@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Projet2Auth.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Projet2Auth.Controllers;
 
@@ -28,4 +29,6 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
+
 }
