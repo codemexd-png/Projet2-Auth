@@ -1,13 +1,19 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Projet2Auth.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Projet2Auth.Areas.Identity.Pages.Account
 {
-    public class LoginModel(SignInManager<IdentityUser> signInManager) : PageModel
+    public class LoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager = signInManager;
+        private readonly SignInManager<AppUser> _signInManager;
+
+        public LoginModel(SignInManager<AppUser> signInManager)
+        {
+            _signInManager = signInManager;
+        }
 
         [BindProperty]
         public InputModel? Input { get; set; }
@@ -18,15 +24,12 @@ namespace Projet2Auth.Areas.Identity.Pages.Account
         {
             [Required(ErrorMessage = "Le courriel est obligatoire.")]
             [EmailAddress(ErrorMessage = "Format de courriel invalide.")]
-            [Display(Name = "Courriel")]
             public string? Email { get; set; }
 
             [Required(ErrorMessage = "Le mot de passe est obligatoire.")]
             [DataType(DataType.Password)]
-            [Display(Name = "Mot de passe")]
             public string? Password { get; set; }
 
-            [Display(Name = "Se souvenir de moi")]
             public bool RememberMe { get; set; }
         }
 
@@ -34,7 +37,5 @@ namespace Projet2Auth.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl ?? Url.Content("~/");
         }
-
-        
     }
 }

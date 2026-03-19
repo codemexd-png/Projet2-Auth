@@ -1,14 +1,23 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Projet2Auth.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Projet2Auth.Areas.Identity.Pages.Account
 {
-    public class RegisterModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) : PageModel
+    public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager = signInManager;
-        private readonly UserManager<IdentityUser> _userManager = userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+
+        public RegisterModel(
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
 
         [BindProperty]
         public InputModel? Input { get; set; }
@@ -19,19 +28,16 @@ namespace Projet2Auth.Areas.Identity.Pages.Account
         {
             [Required(ErrorMessage = "Le courriel est obligatoire.")]
             [EmailAddress(ErrorMessage = "Format de courriel invalide.")]
-            [Display(Name = "Courriel")]
             public string? Email { get; set; }
 
             [Required(ErrorMessage = "Le mot de passe est obligatoire.")]
-            [StringLength(100, ErrorMessage = "Le mot de passe doit avoir au moins {2} caractères.", MinimumLength = 6)]
+            [StringLength(100, MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Mot de passe")]
             public string? Password { get; set; }
 
             [Required(ErrorMessage = "La confirmation est obligatoire.")]
             [DataType(DataType.Password)]
             [Compare("Password", ErrorMessage = "Les mots de passe ne correspondent pas.")]
-            [Display(Name = "Confirmer le mot de passe")]
             public string? ConfirmPassword { get; set; }
         }
 
@@ -46,7 +52,12 @@ namespace Projet2Auth.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input?.Email, Email = Input?.Email };
+                var user = new AppUser
+                {
+                    UserName = Input?.Email,
+                    Email = Input?.Email
+                };
+
                 var result = await _userManager.CreateAsync(user, Input?.Password!);
 
                 if (result.Succeeded)
@@ -55,7 +66,6 @@ namespace Projet2Auth.Areas.Identity.Pages.Account
                     return LocalRedirect(returnUrl);
                 }
 
-                // Affiche les erreurs (ex : email déjà utilisé)
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);

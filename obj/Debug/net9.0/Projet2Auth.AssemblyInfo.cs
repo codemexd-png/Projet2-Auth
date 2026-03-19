@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Projet2Auth")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a64684e8cc544ca751b2d70bc68abb109add1317")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+396c9e9f4d239e47f8cc99bc3af396e8033d3824")]
 [assembly: System.Reflection.AssemblyProductAttribute("Projet2Auth")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Projet2Auth")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
