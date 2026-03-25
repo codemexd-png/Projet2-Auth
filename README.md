@@ -93,7 +93,13 @@ Préparer la base de données et rendre l’application directement testable
 
 Admin
 Email : admin@test.com
-Mot de passe : Admin12345!
+Mot de passe : Admin123!
+
+User 
+
+Email : user@test.com
+Mot de passe : User123!
+
 
 
 ---------------------------------Comment tester le projet -------------------------
